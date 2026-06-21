@@ -437,24 +437,22 @@ El motor arrojó un indicador de cobertura estructural del \textbf{100\%} sobre 
 Para integrar el análisis estático del proyecto integrador \textit{Outline} con la plataforma SonarQube, el Equipo 04 desplegó una instancia local mediante contenedores Docker, evitando así la dependencia de servicios externos en la nube y garantizando control total sobre el entorno de auditoría \parencite{pressman2014}. La configuración del escáner se declaró mediante el archivo descriptor \texttt{sonar-project.properties}, ubicado en la raíz del repositorio, el cual establece las rutas de origen del código fuente, las rutas de las pruebas y la vinculación con el reporte de cobertura generado dinámicamente por la suite de Selenium y pytest.
 
 \begin{lstlisting}[language=bash, caption={Descriptor de propiedades del proyecto para el escáner de SonarQube.}]
-% sonar-project.properties en la raíz del repositorio
 sonar.host.url=http://localhost:9000
 sonar.projectKey=Outline-Equipo04
 sonar.projectName=Outline Wiki Organizacional - Equipo 04
 sonar.projectVersion=1.0.0
 
-% Rutas de origen y declaración de pruebas
-sonar.sources=server,src
+sonar.sources=pages
 sonar.tests=tests
 
-% Integración del mapa de cobertura recolectado dinámicamente
-sonar.javascript.lcov.reportPaths=coverage/lcov.info
 sonar.python.coverage.reportPaths=coverage.xml
+sonar.python.version=3.13
 
-% Configuración del motor y exclusiones lógicas
 sonar.sourceEncoding=UTF-8
-sonar.exclusions=node_modules/**,dist/**,build/**,public/assets/**
+sonar.exclusions=**/__pycache__/**
 \end{lstlisting}
+
+Durante la primera ejecución del escáner se detectó una incidencia operativa relevante para la trazabilidad del proceso: el archivo \texttt{coverage.xml} generado originalmente por el integrante responsable de las pruebas contenía una ruta absoluta de directorio anclada a su estación de trabajo local (p. ej. \texttt{C:\textbackslash Users\textbackslash[usuario]\textbackslash...}), lo que impedía que SonarQube resolviera la ubicación física de los archivos fuente al ejecutarse desde una máquina distinta. Este hallazgo motivó la regeneración del reporte de cobertura utilizando rutas relativas (\texttt{pages}), evidenciando la importancia de estandarizar los comandos de generación de artefactos dentro del flujo de trabajo colaborativo del equipo.
 
 % --- INSERTAR AQUÍ: Figura con captura del tablero/dashboard de SonarQube ---
 % \begin{figure}[H]
@@ -466,29 +464,8 @@ sonar.exclusions=node_modules/**,dist/**,build/**,public/assets/**
 
 \section{Interpretación Analítica de las Cinco Dimensiones de Calidad}
 
-Tras la integración completa del descriptor de propiedades y el mapeo del archivo estructurado de cobertura, el motor centralizado de SonarQube procesó la base de código de \textit{Outline}, arrojando métricas concluyentes sobre la salud del repositorio \parencite{myers2011}.
+Tras la integración completa del descriptor de propiedades y el mapeo del archivo estructurado de cobertura, el motor centralizado de SonarQube procesó la base de código de \textit{Outline}, arrojando las métricas reportadas en la Tabla 5.1 \parencite{myers2011}.
 
-\subsection{Dimensión 1: Confiabilidad (Reliability)}
-% === RELLENAR CON DATOS REALES DEL TABLERO ===
-El análisis estático interceptó un total de \textbf{[N] Bugs} latentes localizados en [DESCRIBIR DÓNDE: ej. "las promesas y retornos asíncronos de los controladores del backend" / "el módulo de notificaciones" / etc.]. La plataforma asignó una calificación técnica de \textbf{Clase [A/B/C/D/E]}, [EXPLICAR BREVEMENTE QUÉ SIGNIFICA ESA CLASE PARA EL CASO ESPECÍFICO ENCONTRADO].
-
-\subsection{Dimensión 2: Seguridad (Security)}
-% === RELLENAR CON DATOS REALES DEL TABLERO ===
-Se registraron \textbf{[N] Vulnerabilidades} directas abiertas, asignando una calificación de \textbf{Clase [A/B/C/D/E]}. El hallazgo más relevante se ubica en [DESCRIBIR: archivo/módulo/tipo de vulnerabilidad encontrada], revelando [BREVE EXPLICACIÓN DEL RIESGO].
-
-\subsection{Dimensión 3: Mantenibilidad (Maintainability)}
-% === RELLENAR CON DATOS REALES DEL TABLERO ===
-La herramienta detectó un volumen acumulado de \textbf{[N] Code Smells} (olores de código), calculando una deuda técnica global tasada bajo el modelo SQALE en \textbf{[N] días/horas laborables de desarrollo}. El proyecto conserva una calificación general de \textbf{Clase [A/B/C/D/E]}, [EXPLICAR LA CAUSA PRINCIPAL DE LA PENALIZACIÓN SI APLICA] \parencite{fowler2018}.
-
-\subsection{Dimensión 4: Duplicación de Código (Duplications)}
-% === RELLENAR CON DATOS REALES DEL TABLERO ===
-La métrica de líneas redundantes se estableció en un \textbf{[N]\%}, distribuido en [N] bloques de sentencias análogas dentro de [DESCRIBIR MÓDULO/ARCHIVO]. [INDICAR SI ESTÁ POR DEBAJO O ARRIBA DEL umbral de 5\% recomendado por convención industrial] \parencite{sommerville2011}.
-
-\subsection{Dimensión 5: Cobertura de Pruebas (Coverage)}
-% === RELLENAR CON DATOS REALES DEL TABLERO (debe coincidir con coverage.xml del Integrante 2 / Pepe) ===
-Gracias a la inyección exitosa del reporte binario originado por la suite dinámica de Selenium e interpretado por el linter, el panel unificado de SonarQube consolidó un porcentaje de cobertura de sentencias físicas del \textbf{[N]\%}. [INDICAR SI SUPERA O NO EL UMBRAL DEL 80\% RECOMENDADO POR EL EQUIPO] \parencite{pressman2014}.
-
-% --- INSERTAR AQUÍ: Tabla resumen de las 5 dimensiones con sus ratings ---
 \begin{table}[H]
 \centering
 \caption{Resumen consolidado de las cinco dimensiones de calidad — Outline-Equipo04.}
@@ -497,40 +474,58 @@ Gracias a la inyección exitosa del reporte binario originado por la suite diná
 \hline
 \textbf{Dimensión} & \textbf{Rating} & \textbf{Métrica clave} \\
 \hline
-Reliability (Bugs) & [A-E] & [N] bugs \\
+Reliability (Bugs) & A & 0 issues abiertos \\
 \hline
-Security (Vulnerabilities) & [A-E] & [N] vulnerabilidades \\
+Security (Vulnerabilities) & A & 0 issues abiertos \\
 \hline
-Maintainability (Code Smells) & [A-E] & [N] smells / [N] días deuda \\
+Maintainability (Code Smells) & A & 0 issues abiertos \\
 \hline
-Duplications & --- & [N]\% \\
+Security Hotspots & A & 0 hotspots \\
 \hline
-Coverage & --- & [N]\% \\
+Duplications & --- & 0.0\% (sobre 63 líneas) \\
+\hline
+Coverage & --- & 58.3\% (sobre 36 líneas a cubrir) \\
 \hline
 \end{tabularx}
 \end{table}
 
+\subsection{Dimensión 1: Confiabilidad (Reliability)}
+El análisis estático automatizado no interceptó Bugs en el código fuente analizado, asignando una calificación de \textbf{Clase A}. Esto es consistente con el reducido volumen de líneas de código evaluadas (40 líneas efectivas en las clases \texttt{BasePage} y \texttt{LoginPage}) y con el conjunto limitado de reglas de detección disponibles para Python en la edición Community de SonarQube, según se discute en la Sección 5.3.
+
+\subsection{Dimensión 2: Seguridad (Security)}
+No se registraron vulnerabilidades directas ni \textit{Security Hotspots} mediante el escaneo automatizado, obteniendo \textbf{Clase A}. No obstante, la revisión manual complementaria del código (Sección 5.3) identificó la presencia de una credencial de prueba escrita de forma literal (\textit{hardcoded}) dentro del método de autenticación, un patrón que típicamente constituye un hallazgo de seguridad en auditorías más exhaustivas o en motores de análisis con reglas de detección de secretos más estrictas.
+
+\subsection{Dimensión 3: Mantenibilidad (Maintainability)}
+La herramienta no detectó \textit{Code Smells} bajo las reglas activas de la edición Community para el lenguaje Python, conservando una calificación de \textbf{Clase A} \parencite{fowler2018}. Sin embargo, la inspección manual del código evidenció decisiones de diseño que afectan la mantenibilidad real del proyecto, descritas en la Sección 5.3.
+
+\subsection{Dimensión 4: Duplicación de Código (Duplications)}
+La métrica de líneas redundantes se estableció en \textbf{0.0\%} sobre un total de 63 líneas analizadas, resultado esperado dada la baja superficie de código evaluada en esta primera iteración del proyecto \parencite{sommerville2011}.
+
+\subsection{Dimensión 5: Cobertura de Pruebas (Coverage)}
+Gracias a la corrección e inyección exitosa del reporte \texttt{coverage.xml} generado por la suite dinámica de Selenium y pytest, el panel unificado de SonarQube consolidó un porcentaje de cobertura de sentencias físicas del \textbf{58.3\%}, sobre un total de 36 líneas elegibles para cobertura. Este resultado se encuentra por debajo del umbral del 80\% que el equipo estableció como meta de gobernanza (Sección 6.3), lo cual se explica principalmente porque la clase \texttt{BasePage} —que centraliza los métodos de espera explícita— no es ejercitada de manera directa por las pruebas actuales, ya que \texttt{LoginPage} no hereda de ella (véase Sección 5.3) \parencite{pressman2014}.
+
 \section{Análisis Detallado de Issues Representativos}
-% === LA RÚBRICA EXIGE MÍNIMO 3 ISSUES REALES ANALIZADOS (tipo, severidad, línea, explicación) ===
-% Elige 3 issues reales del panel de SonarQube → pestaña "Issues" del proyecto.
-% Para cada uno, copia: tipo (Bug/Vulnerability/Code Smell/Security Hotspot), severidad, archivo:línea, y explica en tus palabras qué significa y por qué importa.
+
+Si bien el escaneo automatizado de SonarQube no reportó issues abiertos —resultado consistente con el tamaño reducido del módulo analizado y las limitaciones de cobertura de reglas para Python en la edición Community—, la revisión manual de código realizada por el equipo permitió identificar tres hallazgos relevantes que un análisis estático más exhaustivo (o una revisión de Pull Request) debería capturar. Estos hallazgos se documentan en la Tabla 5.2 siguiendo la misma taxonomía utilizada por SonarQube (Bug, Vulnerability, Code Smell), para mantener trazabilidad metodológica.
 
 \begin{table}[H]
 \centering
-\caption{Issues representativos identificados por SonarQube en el código de Outline.}
+\caption{Issues representativos identificados mediante revisión manual sobre el código de Outline.}
 \small
-\begin{tabularx}{\textwidth}{|p{1.3cm}|p{2.2cm}|p{2.5cm}|X|}
+\begin{tabularx}{\textwidth}{|p{1.3cm}|p{2.3cm}|p{2.6cm}|X|}
 \hline
 \textbf{ID} & \textbf{Tipo} & \textbf{Severidad / Ubicación} & \textbf{Descripción técnica} \\
 \hline
-1 & [Bug/Vulnerability/Smell] & [Severidad] / [archivo:línea] & [Explicación de qué detectó y por qué es relevante] \\
+1 & Code Smell (diseño) & Mayor / \texttt{login\_page.py}, declaración de clase & La clase \texttt{LoginPage} no hereda de \texttt{BasePage} (\texttt{class LoginPage:} en lugar de \texttt{class LoginPage(BasePage):}). Como consecuencia, los métodos centralizados de espera explícita (\texttt{find\_element}, \texttt{click}, \texttt{send\_keys}) quedan sin utilizar, y \texttt{LoginPage} invoca llamadas directas al \texttt{driver} sin pasar por la capa de abstracción definida en el patrón POM. \\
 \hline
-2 & [Bug/Vulnerability/Smell] & [Severidad] / [archivo:línea] & [Explicación de qué detectó y por qué es relevante] \\
+2 & Vulnerability & Mayor / \texttt{login\_page.py}, método \texttt{login()} & La contraseña de prueba se encuentra escrita de forma literal en el código fuente (\texttt{"SuperSecretPassword!"}), un patrón de credencial \textit{hardcoded} que constituye una mala práctica de seguridad incluso en entornos de prueba, al exponer cadenas sensibles dentro del control de versiones. \\
 \hline
-3 & [Bug/Vulnerability/Smell] & [Severidad] / [archivo:línea] & [Explicación de qué detectó y por qué es relevante] \\
+3 & Bug & Menor / \texttt{login\_page.py}, método \texttt{login()} & La línea \texttt{user\_field.send\_digits(email) if hasattr(user\_field, 'send\_digits') else user\_field.send\_keys(email)} referencia un método \texttt{send\_digits} que no existe en la API de Selenium WebElement. La condición \texttt{hasattr} nunca se cumple, por lo que el código funciona únicamente por la rama \texttt{else}, pero la línea introduce complejidad y código muerto sin ningún beneficio funcional. \\
 \hline
 \end{tabularx}
 \end{table}
+
+Este ejercicio evidencia una conclusión metodológica relevante para el proyecto: el análisis estático automatizado y la revisión manual de código son complementarios, no sustitutos entre sí. Mientras que SonarQube es eficaz para detectar patrones sintácticos conocidos a gran escala, ciertos defectos de diseño y de lógica de negocio —como la ruptura de un patrón arquitectónico acordado por el equipo— requieren criterio humano para ser identificados.
 
 
 % =============================================================================
@@ -540,32 +535,32 @@ Coverage & --- & [N]\% \\
 
 \section{Definición Conceptual de la Deuda Técnica del Proyecto}
 
-La deuda técnica representa una metáfora financiera aplicada a la ingeniería de software, en la cual priorizar soluciones temporales aceleradas e imperfectas para cumplir con plazos inmediatos genera un costo acumulado en forma de horas adicionales de retrabajo futuro \parencite{fowler2018}. Para mantener la viabilidad de la plataforma Outline, el Equipo 04 diseñó un plan sistemático orientado a sanear los riesgos más severos arrojados por SonarQube, adoptando además el enfoque \textit{Clean as You Code}: en lugar de intentar remediar de forma retroactiva la totalidad de la deuda histórica del repositorio, la estrategia se centra en garantizar que todo código nuevo o modificado cumpla con los estándares de calidad definidos, evitando así la acumulación adicional de deuda mientras se sanea gradualmente el código preexistente \parencite{sommerville2011}.
+La deuda técnica representa una metáfora financiera aplicada a la ingeniería de software, en la cual priorizar soluciones temporales aceleradas e imperfectas para cumplir con plazos inmediatos genera un costo acumulado en forma de horas adicionales de retrabajo futuro \parencite{fowler2018}. Para mantener la viabilidad de la plataforma Outline, el Equipo 04 diseñó un plan sistemático orientado a sanear los riesgos más severos identificados tanto por el escáner automatizado como por la revisión manual de código, adoptando además el enfoque \textit{Clean as You Code}: en lugar de intentar remediar de forma retroactiva la totalidad de la deuda histórica del repositorio, la estrategia se centra en garantizar que todo código nuevo o modificado cumpla con los estándares de calidad definidos, evitando así la acumulación adicional de deuda mientras se sanea gradualmente el código preexistente \parencite{sommerville2011}.
 
 \section{Matriz de Priorización de Hallazgos por Niveles de Severidad}
 
-La Tabla 6.1 estructura la hoja de ruta técnica requerida para mitigar de manera controlada y escalable las debilidades lógicas detectadas en la wiki organizacional. El criterio de ordenamiento prioriza la severidad y el impacto potencial sobre el sistema, no la facilidad de implementación.
+La Tabla 6.1 estructura la hoja de ruta técnica requerida para mitigar de manera controlada y escalable las debilidades detectadas en el módulo de automatización de Outline. El criterio de ordenamiento prioriza la severidad y el impacto potencial sobre el sistema y la mantenibilidad de la suite, no la facilidad de implementación.
 
-% === RELLENAR CON LOS ISSUES REALES, PRIORIZADOS POR SEVERIDAD (no por "lo más fácil primero") ===
 \begin{table}[H]
 \centering
 \caption{Matriz priorizada para la gobernanza y remediación de la deuda técnica.}
 \small
-\begin{tabularx}{\textwidth}{|p{1.6cm}|p{2.0cm}|X|p{1.5cm}|p{2.0cm}|}
+\begin{tabularx}{\textwidth}{|p{1.6cm}|p{2.0cm}|X|p{1.6cm}|p{2.1cm}|}
 \hline
 \textbf{ID} & \textbf{Severidad} & \textbf{Descripción del hallazgo} & \textbf{Esfuerzo est.} & \textbf{Prioridad / Responsable} \\
 \hline
-REM-01 & [Blocker/Critical/Major/Minor] & [Descripción del issue 1] & [N h/min] & [Alta/Media/Baja] — [Nombre] \\
+REM-01 & Mayor & Credencial de prueba escrita de forma literal en \texttt{login\_page.py} (\texttt{"SuperSecretPassword!"}). Riesgo de seguridad y mala práctica que debe migrar a una variable de entorno o archivo de configuración excluido del control de versiones. & 30 min & Alta — Integrante 1 (Fabiola) \\
 \hline
-REM-02 & [Blocker/Critical/Major/Minor] & [Descripción del issue 2] & [N h/min] & [Alta/Media/Baja] — [Nombre] \\
+REM-02 & Mayor & \texttt{LoginPage} no hereda de \texttt{BasePage}, rompiendo el patrón POM acordado por el equipo y dejando sin uso la capa de esperas explícitas centralizadas. Corrección: declarar \texttt{class LoginPage(BasePage):} y refactorizar el método \texttt{login()} para usar \texttt{self.find\_element()}, \texttt{self.click()} y \texttt{self.send\_keys()} en lugar de llamadas directas al driver. & 1 h & Alta — Integrante 1 (Fabiola) \\
 \hline
-REM-03 & [Blocker/Critical/Major/Minor] & [Descripción del issue 3] & [N h/min] & [Alta/Media/Baja] — [Nombre] \\
+REM-03 & Menor & Línea con referencia a un método inexistente (\texttt{send\_digits}) dentro de \texttt{login()}, que introduce una condición \texttt{hasattr} sin valor funcional. Corrección: eliminar la condición y dejar únicamente la llamada válida \texttt{user\_field.send\_keys(email)}. & 10 min & Media — Integrante 1 (Fabiola) \\
+\hline
+REM-04 & Menor & Cobertura de pruebas (58.3\%) por debajo del umbral de gobernanza acordado (80\%), explicada principalmente por la falta de ejercitación directa de \texttt{BasePage} una vez corregido REM-02. & 1 h & Media — Integrante 2 (Pepe) \\
 \hline
 \end{tabularx}
 \end{table}
 
-% === JUSTIFICACIÓN DEL ORDEN: la rúbrica pide explicar por qué se priorizó así (severidad/impacto, no facilidad) ===
-El orden de la matriz anterior responde al criterio de severidad e impacto potencial sobre el sistema en producción, y no a la facilidad relativa de implementación de cada corrección. [AGREGAR 2-3 LÍNEAS EXPLICANDO POR QUÉ EL ISSUE REM-01 SE ATIENDE PRIMERO, POR EJEMPLO: "porque compromete la seguridad del módulo de autenticación y bloquearía el pipeline de CI/CD si se introdujera en producción", etc.]
+El orden de la matriz anterior responde al criterio de severidad e impacto potencial sobre la arquitectura del proyecto, y no a la facilidad relativa de implementación de cada corrección. Los hallazgos REM-01 y REM-02 se atienden primero porque comprometen, respectivamente, la seguridad del flujo de autenticación y la integridad del patrón arquitectónico Page Object Model que sustenta toda la estrategia de automatización del equipo; postergar su corrección incrementaría el costo de retrabajo en futuras iteraciones de la suite. El hallazgo REM-04, aunque de severidad menor en términos de SonarQube, se posiciona después de las correcciones estructurales porque su resolución depende directamente de que \texttt{LoginPage} ejercite la clase base una vez corregido REM-02.
 
 \section{Políticas de Gobernanza de Código Acordadas}
 
@@ -574,7 +569,7 @@ Para blindar los incrementos lógicos de las entregas subsecuentes contra la deg
 \begin{enumerate}
     \item Queda estrictamente prohibida la integración en la rama principal (\texttt{main}) de cualquier incremento que introduzca Bugs Bloqueantes o Críticos, congelando automáticamente el pipeline en el servidor.
     \item La cobertura mínima admisible tras cualquier cambio estructural se fija en un \textbf{80\% continuo}, obligando a actualizar paralelamente los Page Objects de Selenium y las pruebas parametrizadas \parencite{sommerville2011}.
-    \item % === AGREGAR UNA TERCERA POLÍTICA SI LA RÚBRICA O TU EQUIPO LA DEFINE, ej. revisión obligatoria de Pull Requests, umbral máximo de duplicación, etc. ===
+    \item Todo Page Object nuevo debe heredar explícitamente de \texttt{BasePage} y reutilizar sus métodos de espera explícita; las revisiones de Pull Request deben verificar este requisito antes de aprobar la fusión a \texttt{main}, dado que este tipo de desviación arquitectónica no es detectada por el escáner estático automatizado.
 \end{enumerate}
 
 % =============================================================================
@@ -583,10 +578,49 @@ Para blindar los incrementos lógicos de las entregas subsecuentes contra la deg
 \chapter{Evidencia de Versionamiento en Git y Distribución de Aportes}
 
 \section{Trazabilidad y Bitácora Cronológica de Commits}
-% PENDIENTE DE COLOCAR CONTENIDO ADICIONAL HASTA CONTAR CON LOS COMMITS DEL REPOSITORIO
+
+El repositorio del proyecto integrador documenta de forma incremental el desarrollo de la suite de automatización y del presente informe técnico a través del historial de \textit{commits} de la rama principal (\texttt{main}). La Tabla 7.1 sintetiza cronológicamente las contribuciones registradas, evidenciando la naturaleza distribuida e iterativa del trabajo en equipo \parencite{sommerville2011}.
+
+% --- INSERTAR AQUÍ: Figura con captura del historial de commits de GitHub ---
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{imagenes/historial_commits.png}
+%     \caption{Historial de commits de la rama principal del repositorio Outline-Equipo04.}
+%     \label{fig:historial_commits}
+% \end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Bitácora cronológica de commits registrados en la rama principal del repositorio.}
+\small
+\begin{tabularx}{\textwidth}{|p{2.0cm}|X|p{2.4cm}|p{1.6cm}|}
+\hline
+\textbf{Fecha} & \textbf{Mensaje de commit} & \textbf{Autor (matrícula)} & \textbf{Hash} \\
+\hline
+19/06/2026 & Estructura del documento maestro e integración de los capítulos de investigación & UP240244 (Alison) & 7dd2cab \\
+\hline
+20/06/2026 & Agregar contenido de capítulos 5 y 6 (SonarQube y plan de remediación) & UP240514 (Ángel) & 840f7b3 \\
+\hline
+20/06/2026 & Feat(Tests): Entrega del Integrante 2 completa con 5 escenarios, coverage y reporte .tex & UP240259 (Pepe) & 7d4ea1f \\
+\hline
+20/06/2026 & Merge branch \texttt{main} de origin & UP240259 (Pepe) & d2bc3c6 \\
+\hline
+21/06/2026 & Fix(Coverage): Se regenera reporte usando rutas relativas para compatibilidad con SonarQube & UP240259 (Pepe) & dfb36e6 \\
+\hline
+21/06/2026 & Fix(Coverage): Forzado exitoso de rutas relativas en el source del XML & UP240259 (Pepe) & 2a6295e \\
+\hline
+\end{tabularx}
+\end{table}
+
+% === NOTA INTERNA DEL EQUIPO — borrar este párrafo si ya se resuelve antes de entregar ===
+% Es importante que Fabiola suba al menos un commit con su propia cuenta de GitHub antes
+% de la entrega, ya que el historial actual no registra ninguna contribución bajo su usuario,
+% lo cual la rúbrica de la tarea señala explícitamente como motivo de descuento grupal.
+
+La revisión del historial permite observar dos hitos relevantes en el ciclo de vida del repositorio: primero, la consolidación inicial de la estructura documental por parte de la Integrante 4 (Alison), que sentó las bases del \texttt{main.tex} compartido; y segundo, un ciclo de corrección iterativa sobre el archivo \texttt{coverage.xml}, en el cual se identificó y resolvió una incompatibilidad de rutas absolutas que impedía la correcta integración del reporte de cobertura con el escáner de SonarQube, evidenciando un proceso real de depuración colaborativa entre integrantes.
 
 \section{Distribución y Matriz Formal de Aportes Individuales}
-Para garantizar el cumplimiento de la rúbrica evaluativa del docente respecto al trabajo balanceado en equipo, la Tabla 7.1 desglosa las actividades técnicas y documentales asignadas de forma equitativa entre los cuatro integrantes.
+Para garantizar el cumplimiento de la rúbrica evaluativa del docente respecto al trabajo balanceado en equipo, la Tabla 7.2 desglosa las actividades técnicas y documentales asignadas de forma equitativa entre los cuatro integrantes.
 
 \begin{table}[H]
 \centering
@@ -598,15 +632,14 @@ Para garantizar el cumplimiento de la rúbrica evaluativa del docente respecto a
 \hline
 \textbf{Fabiola Guadalupe Palomino Badillo} & 25\% & Concepción de la arquitectura de automatización web. Codificación del fixture de ciclo de vida del driver de Selenium y la clase base POM con esperas explícitas (\texttt{conftest.py} y \texttt{base\_page.py}). \\
 \hline
-\textbf{José de Jesús Hernández Gutierrez} & 25\% & Diseño e inyección de la matriz de datos de prueba parametrizados en pytest para el login IAM. Gestión del motor de cobertura dinámica y exportación del archivo estructurado \texttt{coverage.xml}. \\
+\textbf{José de Jesús Hernández Gutierrez} & 25\% & Diseño e inyección de la matriz de datos de prueba parametrizados en pytest para el login IAM. Gestión del motor de cobertura dinámica, depuración de incompatibilidad de rutas y exportación del archivo estructurado \texttt{coverage.xml}. \\
 \hline
-\textbf{Ángel Iván García Salazar} & 25\% & Despliegue del servidor local de SonarQube, configuración de las propiedades del escáner técnico, extracción de las métricas de las cinco dimensiones de calidad y diseño de la matriz de priorización SQALE. \\
+\textbf{Ángel Iván García Salazar} & 25\% & Despliegue del servidor local de SonarQube mediante Docker, configuración de las propiedades del escáner técnico, extracción de las métricas de las cinco dimensiones de calidad, revisión manual complementaria de issues de código y diseño de la matriz de priorización SQALE. \\
 \hline
 \textbf{Alison Tamara Romo Rodríguez} & 25\% & Redacción del marco de investigación comparativo de entornos E2E y estáticos. Coordinación y consolidación de la estructura del reporte en LaTeX bajo estándares académicos y normas de versionamiento Git. \\
 \hline
 \end{tabularx}
 \end{table}
-
 
 % =============================================================================
 % CONCLUSIÓN

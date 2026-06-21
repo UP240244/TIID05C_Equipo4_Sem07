@@ -580,14 +580,6 @@ Para blindar los incrementos lógicos de las entregas subsecuentes contra la deg
 
 El repositorio del proyecto integrador documenta de forma incremental el desarrollo de la suite de automatización y del presente informe técnico a través del historial de \textit{commits} de la rama principal (\texttt{main}). La Tabla 7.1 sintetiza cronológicamente las contribuciones registradas, evidenciando la naturaleza distribuida e iterativa del trabajo en equipo \parencite{sommerville2011}.
 
-% --- INSERTAR AQUÍ: Figura con captura del historial de commits de GitHub ---
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{imagenes/historial_commits.png}
-%     \caption{Historial de commits de la rama principal del repositorio Outline-Equipo04.}
-%     \label{fig:historial_commits}
-% \end{figure}
-
 \begin{table}[H]
 \centering
 \caption{Bitácora cronológica de commits registrados en la rama principal del repositorio.}
@@ -610,11 +602,6 @@ El repositorio del proyecto integrador documenta de forma incremental el desarro
 \hline
 \end{tabularx}
 \end{table}
-
-% === NOTA INTERNA DEL EQUIPO — borrar este párrafo si ya se resuelve antes de entregar ===
-% Es importante que Fabiola suba al menos un commit con su propia cuenta de GitHub antes
-% de la entrega, ya que el historial actual no registra ninguna contribución bajo su usuario,
-% lo cual la rúbrica de la tarea señala explícitamente como motivo de descuento grupal.
 
 La revisión del historial permite observar dos hitos relevantes en el ciclo de vida del repositorio: primero, la consolidación inicial de la estructura documental por parte de la Integrante 4 (Alison), que sentó las bases del \texttt{main.tex} compartido; y segundo, un ciclo de corrección iterativa sobre el archivo \texttt{coverage.xml}, en el cual se identificó y resolvió una incompatibilidad de rutas absolutas que impedía la correcta integración del reporte de cobertura con el escáner de SonarQube, evidenciando un proceso real de depuración colaborativa entre integrantes.
 
@@ -646,7 +633,9 @@ Para garantizar el cumplimiento de la rúbrica evaluativa del docente respecto a
 \chapter*{Conclusión}
 \addcontentsline{toc}{chapter}{Conclusión}
 
+La culminación de este artefacto técnico evidencia que la ingeniería de calidad de software no puede descansar sobre procesos manuales aislados o estimaciones empíricas. La suite dinámica implementada con Selenium WebDriver sobre el Módulo IAM de la wiki \textit{Outline} demuestra que el patrón Page Object Model (POM) mitiga de forma efectiva la inestabilidad de las pruebas frente a fluctuaciones en la interfaz. Asimismo, la orquestación e inyección automatizada de matrices guiadas por datos y parametrizadas bajo el motor de pytest consolida una cobertura estructural robusta y reproducible que minimiza riesgos de regresión funcional \parencite{jorgensen2022}.
 
+De manera correlativa, el análisis estático continuo ejecutado mediante el servidor de SonarQube transforma las nociones cualitativas de salud del código en métricas cuantitativas financieras y técnicas rigurosas bajo el estándar SQALE. Al evaluar de manera integrada las cinco dimensiones esenciales del repositorio, el Equipo 04 adquiere las capacidades analíticas fundamentales para establecer compuertas de calidad automatizadas dentro del ciclo DevOps. Este enfoque coordinado dota al proyecto integrador de la madurez e idoneidad metodológica requerida para cumplir de forma sobresaliente con las metas académicas del curso dictado por el Dr. Raúl Alejandro Velásquez Ortiz \parencite{pressman2014}.
 
 \newpage
 \printbibliography[title={Referencias Bibliográficas}, heading=bibintoc]

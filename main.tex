@@ -454,13 +454,12 @@ sonar.exclusions=**/__pycache__/**
 
 Durante la primera ejecución del escáner se detectó una incidencia operativa relevante para la trazabilidad del proceso: el archivo \texttt{coverage.xml} generado originalmente por el integrante responsable de las pruebas contenía una ruta absoluta de directorio anclada a su estación de trabajo local (p. ej. \texttt{C:\textbackslash Users\textbackslash[usuario]\textbackslash...}), lo que impedía que SonarQube resolviera la ubicación física de los archivos fuente al ejecutarse desde una máquina distinta. Este hallazgo motivó la regeneración del reporte de cobertura utilizando rutas relativas (\texttt{pages}), evidenciando la importancia de estandarizar los comandos de generación de artefactos dentro del flujo de trabajo colaborativo del equipo.
 
-% --- INSERTAR AQUÍ: Figura con captura del tablero/dashboard de SonarQube ---
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.9\textwidth]{imagenes/sonarqube_dashboard.png}
-%     \caption{Tablero general del proyecto Outline-Equipo04 en SonarQube.}
-%     \label{fig:sonarqube_dashboard}
-% \end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenes/sonarqube_dashboard.png}
+    \caption{Tablero general del proyecto Outline-Equipo04 en SonarQube.}
+    \label{fig:sonarqube_dashboard}
+\end{figure}
 
 \section{Interpretación Analítica de las Cinco Dimensiones de Calidad}
 

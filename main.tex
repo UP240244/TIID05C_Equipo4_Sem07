@@ -278,7 +278,103 @@ Se selecciona **SonarQube** para el proyecto integrador Outline debido a su capa
 
 \section{Configuración del Conector del Escáner Estático}
 
+Para integrar el análisis estático del proyecto integrador \textit{Outline} con la plataforma SonarQube, el Equipo 04 desplegó una instancia local mediante contenedores Docker, evitando así la dependencia de servicios externos en la nube y garantizando control total sobre el entorno de auditoría \parencite{pressman2014}. La configuración del escáner se declaró mediante el archivo descriptor \texttt{sonar-project.properties}, ubicado en la raíz del repositorio, el cual establece las rutas de origen del código fuente, las rutas de las pruebas y la vinculación con el reporte de cobertura generado dinámicamente por la suite de Selenium y pytest.
+
+\begin{lstlisting}[language=bash, caption={Descriptor de propiedades del proyecto para el escáner de SonarQube.}]
+% sonar-project.properties en la raíz del repositorio
+sonar.host.url=http://localhost:9000
+sonar.projectKey=Outline-Equipo04
+sonar.projectName=Outline Wiki Organizacional - Equipo 04
+sonar.projectVersion=1.0.0
+
+% Rutas de origen y declaración de pruebas
+sonar.sources=server,src
+sonar.tests=tests
+
+% Integración del mapa de cobertura recolectado dinámicamente
+sonar.javascript.lcov.reportPaths=coverage/lcov.info
+sonar.python.coverage.reportPaths=coverage.xml
+
+% Configuración del motor y exclusiones lógicas
+sonar.sourceEncoding=UTF-8
+sonar.exclusions=node_modules/**,dist/**,build/**,public/assets/**
+\end{lstlisting}
+
+% --- INSERTAR AQUÍ: Figura con captura del tablero/dashboard de SonarQube ---
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.9\textwidth]{imagenes/sonarqube_dashboard.png}
+%     \caption{Tablero general del proyecto Outline-Equipo04 en SonarQube.}
+%     \label{fig:sonarqube_dashboard}
+% \end{figure}
+
 \section{Interpretación Analítica de las Cinco Dimensiones de Calidad}
+
+Tras la integración completa del descriptor de propiedades y el mapeo del archivo estructurado de cobertura, el motor centralizado de SonarQube procesó la base de código de \textit{Outline}, arrojando métricas concluyentes sobre la salud del repositorio \parencite{myers2011}.
+
+\subsection{Dimensión 1: Confiabilidad (Reliability)}
+% === RELLENAR CON DATOS REALES DEL TABLERO ===
+El análisis estático interceptó un total de \textbf{[N] Bugs} latentes localizados en [DESCRIBIR DÓNDE: ej. "las promesas y retornos asíncronos de los controladores del backend" / "el módulo de notificaciones" / etc.]. La plataforma asignó una calificación técnica de \textbf{Clase [A/B/C/D/E]}, [EXPLICAR BREVEMENTE QUÉ SIGNIFICA ESA CLASE PARA EL CASO ESPECÍFICO ENCONTRADO].
+
+\subsection{Dimensión 2: Seguridad (Security)}
+% === RELLENAR CON DATOS REALES DEL TABLERO ===
+Se registraron \textbf{[N] Vulnerabilidades} directas abiertas, asignando una calificación de \textbf{Clase [A/B/C/D/E]}. El hallazgo más relevante se ubica en [DESCRIBIR: archivo/módulo/tipo de vulnerabilidad encontrada], revelando [BREVE EXPLICACIÓN DEL RIESGO].
+
+\subsection{Dimensión 3: Mantenibilidad (Maintainability)}
+% === RELLENAR CON DATOS REALES DEL TABLERO ===
+La herramienta detectó un volumen acumulado de \textbf{[N] Code Smells} (olores de código), calculando una deuda técnica global tasada bajo el modelo SQALE en \textbf{[N] días/horas laborables de desarrollo}. El proyecto conserva una calificación general de \textbf{Clase [A/B/C/D/E]}, [EXPLICAR LA CAUSA PRINCIPAL DE LA PENALIZACIÓN SI APLICA] \parencite{fowler2018}.
+
+\subsection{Dimensión 4: Duplicación de Código (Duplications)}
+% === RELLENAR CON DATOS REALES DEL TABLERO ===
+La métrica de líneas redundantes se estableció en un \textbf{[N]\%}, distribuido en [N] bloques de sentencias análogas dentro de [DESCRIBIR MÓDULO/ARCHIVO]. [INDICAR SI ESTÁ POR DEBAJO O ARRIBA DEL umbral de 5\% recomendado por convención industrial] \parencite{sommerville2011}.
+
+\subsection{Dimensión 5: Cobertura de Pruebas (Coverage)}
+% === RELLENAR CON DATOS REALES DEL TABLERO (debe coincidir con coverage.xml del Integrante 2 / Pepe) ===
+Gracias a la inyección exitosa del reporte binario originado por la suite dinámica de Selenium e interpretado por el linter, el panel unificado de SonarQube consolidó un porcentaje de cobertura de sentencias físicas del \textbf{[N]\%}. [INDICAR SI SUPERA O NO EL UMBRAL DEL 80\% RECOMENDADO POR EL EQUIPO] \parencite{pressman2014}.
+
+% --- INSERTAR AQUÍ: Tabla resumen de las 5 dimensiones con sus ratings ---
+\begin{table}[H]
+\centering
+\caption{Resumen consolidado de las cinco dimensiones de calidad — Outline-Equipo04.}
+\small
+\begin{tabularx}{\textwidth}{|X|c|X|}
+\hline
+\textbf{Dimensión} & \textbf{Rating} & \textbf{Métrica clave} \\
+\hline
+Reliability (Bugs) & [A-E] & [N] bugs \\
+\hline
+Security (Vulnerabilities) & [A-E] & [N] vulnerabilidades \\
+\hline
+Maintainability (Code Smells) & [A-E] & [N] smells / [N] días deuda \\
+\hline
+Duplications & --- & [N]\% \\
+\hline
+Coverage & --- & [N]\% \\
+\hline
+\end{tabularx}
+\end{table}
+
+\section{Análisis Detallado de Issues Representativos}
+% === LA RÚBRICA EXIGE MÍNIMO 3 ISSUES REALES ANALIZADOS (tipo, severidad, línea, explicación) ===
+% Elige 3 issues reales del panel de SonarQube → pestaña "Issues" del proyecto.
+% Para cada uno, copia: tipo (Bug/Vulnerability/Code Smell/Security Hotspot), severidad, archivo:línea, y explica en tus palabras qué significa y por qué importa.
+
+\begin{table}[H]
+\centering
+\caption{Issues representativos identificados por SonarQube en el código de Outline.}
+\small
+\begin{tabularx}{\textwidth}{|p{1.3cm}|p{2.2cm}|p{2.5cm}|X|}
+\hline
+\textbf{ID} & \textbf{Tipo} & \textbf{Severidad / Ubicación} & \textbf{Descripción técnica} \\
+\hline
+1 & [Bug/Vulnerability/Smell] & [Severidad] / [archivo:línea] & [Explicación de qué detectó y por qué es relevante] \\
+\hline
+2 & [Bug/Vulnerability/Smell] & [Severidad] / [archivo:línea] & [Explicación de qué detectó y por qué es relevante] \\
+\hline
+3 & [Bug/Vulnerability/Smell] & [Severidad] / [archivo:línea] & [Explicación de qué detectó y por qué es relevante] \\
+\hline
+\end{tabularx}
+\end{table}
 
 
 % =============================================================================
@@ -288,10 +384,42 @@ Se selecciona **SonarQube** para el proyecto integrador Outline debido a su capa
 
 \section{Definición Conceptual de la Deuda Técnica del Proyecto}
 
+La deuda técnica representa una metáfora financiera aplicada a la ingeniería de software, en la cual priorizar soluciones temporales aceleradas e imperfectas para cumplir con plazos inmediatos genera un costo acumulado en forma de horas adicionales de retrabajo futuro \parencite{fowler2018}. Para mantener la viabilidad de la plataforma Outline, el Equipo 04 diseñó un plan sistemático orientado a sanear los riesgos más severos arrojados por SonarQube, adoptando además el enfoque \textit{Clean as You Code}: en lugar de intentar remediar de forma retroactiva la totalidad de la deuda histórica del repositorio, la estrategia se centra en garantizar que todo código nuevo o modificado cumpla con los estándares de calidad definidos, evitando así la acumulación adicional de deuda mientras se sanea gradualmente el código preexistente \parencite{sommerville2011}.
+
 \section{Matriz de Priorización de Hallazgos por Niveles de Severidad}
+
+La Tabla 6.1 estructura la hoja de ruta técnica requerida para mitigar de manera controlada y escalable las debilidades lógicas detectadas en la wiki organizacional. El criterio de ordenamiento prioriza la severidad y el impacto potencial sobre el sistema, no la facilidad de implementación.
+
+% === RELLENAR CON LOS ISSUES REALES, PRIORIZADOS POR SEVERIDAD (no por "lo más fácil primero") ===
+\begin{table}[H]
+\centering
+\caption{Matriz priorizada para la gobernanza y remediación de la deuda técnica.}
+\small
+\begin{tabularx}{\textwidth}{|p{1.6cm}|p{2.0cm}|X|p{1.5cm}|p{2.0cm}|}
+\hline
+\textbf{ID} & \textbf{Severidad} & \textbf{Descripción del hallazgo} & \textbf{Esfuerzo est.} & \textbf{Prioridad / Responsable} \\
+\hline
+REM-01 & [Blocker/Critical/Major/Minor] & [Descripción del issue 1] & [N h/min] & [Alta/Media/Baja] — [Nombre] \\
+\hline
+REM-02 & [Blocker/Critical/Major/Minor] & [Descripción del issue 2] & [N h/min] & [Alta/Media/Baja] — [Nombre] \\
+\hline
+REM-03 & [Blocker/Critical/Major/Minor] & [Descripción del issue 3] & [N h/min] & [Alta/Media/Baja] — [Nombre] \\
+\hline
+\end{tabularx}
+\end{table}
+
+% === JUSTIFICACIÓN DEL ORDEN: la rúbrica pide explicar por qué se priorizó así (severidad/impacto, no facilidad) ===
+El orden de la matriz anterior responde al criterio de severidad e impacto potencial sobre el sistema en producción, y no a la facilidad relativa de implementación de cada corrección. [AGREGAR 2-3 LÍNEAS EXPLICANDO POR QUÉ EL ISSUE REM-01 SE ATIENDE PRIMERO, POR EJEMPLO: "porque compromete la seguridad del módulo de autenticación y bloquearía el pipeline de CI/CD si se introdujera en producción", etc.]
 
 \section{Políticas de Gobernanza de Código Acordadas}
 
+Para blindar los incrementos lógicos de las entregas subsecuentes contra la degradación arquitectónica, el equipo instituye las siguientes reglas de control automatizado, alineadas con el principio \textit{Clean as You Code}:
+
+\begin{enumerate}
+    \item Queda estrictamente prohibida la integración en la rama principal (\texttt{main}) de cualquier incremento que introduzca Bugs Bloqueantes o Críticos, congelando automáticamente el pipeline en el servidor.
+    \item La cobertura mínima admisible tras cualquier cambio estructural se fija en un \textbf{80\% continuo}, obligando a actualizar paralelamente los Page Objects de Selenium y las pruebas parametrizadas \parencite{sommerville2011}.
+    \item % === AGREGAR UNA TERCERA POLÍTICA SI LA RÚBRICA O TU EQUIPO LA DEFINE, ej. revisión obligatoria de Pull Requests, umbral máximo de duplicación, etc. ===
+\end{enumerate}
 
 % =============================================================================
 % CAPÍTULO 7: CONTROL DE VERSIONAMIENTO Y APORTES INDIVIDUALES (YO)
